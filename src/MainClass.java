@@ -14,8 +14,6 @@ public class MainClass {
     	do {
     		CaluBack = Create.CaluCreate(Rance);//创建后缀式，并保存（字符数组）
         	Create.EquationConstruct();//转换为中缀式
-        	
-        	
     		
         	if(Count.CaluCount(CaluBack)) //根据后缀式计算结果，返回值表示计算结果是否符合要求
         	{	
