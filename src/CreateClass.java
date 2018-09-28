@@ -2,11 +2,15 @@ import java.util.Stack;
 
 public class CreateClass {
 
-	private char[] CaluBack = new char[7];
+	private String[] CaluBack = new String[7];
 	private String Calu = "";
 	
-	public char[] CaluCreate(int Rance) {	//创建一个逆波兰式的算式
-		char[] SingCollection = {'+', '-', '*', '/'};
+	private boolean isDigit(String strNum){
+        return strNum.matches("[0-9]{1,}");
+    }
+	
+	public String[] CaluCreate(int Rance) {	//创建一个逆波兰式的算式
+		String[] SingCollection = {"+", "-", "*", "/", "#"};
 		int n = 0;
 		int c = 0;
 		int i=0;
@@ -14,12 +18,12 @@ public class CreateClass {
 		do {
 			if( ((int)(Math.random()*2) != 1) && (n-1 > c) ) {
 			//随机但后缀式中算符数量不可大于数字数量（从左到右）
-				CaluBack[i++] = SingCollection[(int)(Math.random()*4)];
+				CaluBack[i++] = SingCollection[(int)(Math.random()*5)];
 				c++;
 			}
 			else if(n < 4){
 			//生成4个数字了就不再生成数字
-				CaluBack[i++] = (char)( ((int)(Math.random()*Rance)) + 48);
+				CaluBack[i++] = (int)(Math.random()*Rance) + "";
 				n++;
 			}
 			
@@ -34,7 +38,7 @@ public class CreateClass {
 		String s1, s2;
 		
 		for(loop1=0; loop1<CaluBack.length; loop1++) {//注释参考隔壁CountClass
-			if( CaluBack[loop1] >= '0' && CaluBack[loop1] <= '9') {
+			if(isDigit(CaluBack[loop1])) {
 				CaluMid.push(CaluBack[loop1] + "");
 			}
 			
@@ -43,27 +47,31 @@ public class CreateClass {
 				s2 = CaluMid.pop();
 				
 				switch(CaluBack[loop1]) {
-				case '+': 
-					CaluMid.push(s2 + "+" + s1); 
+				case "+": 
+					CaluMid.push(s2 + " + " + s1); 
 					break;
 					
-				case '-': 
-					CaluMid.push(s2 + "-" + s1); 
+				case "-": 
+					CaluMid.push(s2 + " - " + s1); 
 					break;
 					
-				case '*': 
-					CaluMid.push(s2 + "*" + s1); 
+				case "*": 
+					CaluMid.push(s2 + " * " + s1); 
 					break;
 					
-				case '/': 
-					CaluMid.push(s2 + "/" + s1); 
+				case "/": 
+					CaluMid.push(s2 + " / " + s1); 
+					break;
+					
+				case "#": 
+					CaluMid.push(s2); 
 					break;
 					
 				default: 
 					break;
 				}
 				
-				if(loop1 != CaluBack.length - 1) {
+				if(loop1 != CaluBack.length - 1 && CaluBack[loop1] != "#") {
 					CaluMid.push("(" + CaluMid.pop() + ")");
 				}
 			}	
@@ -83,7 +91,7 @@ public class CreateClass {
 		return Calu;
 	}
 	
-	public char[] getCaluBack() {
+	public String[] getCaluBack() {
 		return CaluBack;
 	}
 	

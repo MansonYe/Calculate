@@ -1,13 +1,18 @@
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+
 public class MainClass {
-    public void Run(int Rance, int Number) {
+	
+    private void Build(int Rance, int Number) {
     	CreateClass Create = new CreateClass();
     	CountClass Count = new CountClass();
-    	ReadClass Reader = new ReadClass();
     	
-    	Reader.ReadFile();
-    	
-    	char[] CaluBack;//暂存后缀式
+    	String[] CaluBack;//暂存后缀式
     	String Calu;//保存中缀式
     	String Result;//保存结果
     	
@@ -20,44 +25,75 @@ public class MainClass {
         		Result = Count.getResult();//保存结果（字符串）
         		Calu = Create.getCalu();//保存中缀式（字符串）
         		
-        		/*
-        		请在这里补充Result和Calu的写入函数的调用
-        		谢谢张鸿[呲牙]
-        		*/
+        		/**************/
         		
-        		//测试部分
-        		//Create.CreateTest();
-            	//Count.CountTest();
-            	//System.out.println("");
-            	//测试部分
-            	
+	        	Create.CreateTest();    Count.CountTest();    System.out.println("");
+        		//testing
         	}
         	else {//不符合要求，则Number自加，以便重做
         		Number++;
-        
-        		//测试部分
-        		//System.out.println("fail\n");
-        		//测试部分
         	}
         	
     	}while(--Number != 0);
     	
-    	/*
-    	Create.CaluCreate(Rance);
-    	Create.EquationConstruct();
-    	
-    	Count.CaluCount(Create.getCaluBack());
-    	
-    	Create.CreateTest();
-    	Count.CountTest();
-    	*/
-    	
-        }
+    }
 	
+    private void Judge() {
+    	File fileE = new File("ExercisesTest.txt");
+		File fileA = new File("AnswerTest.txt");
+		BufferedReader readerE = null;
+		BufferedReader readerA = null;
+		Scanner input = new Scanner(System.in);
+		int Tnum = 0;
+		int Fnum = 0;
+		int Anum = 1;
+		// TestAnswer = {"10", "6'1/4", "5'1/3", "21"};
+	   
+		try {
+		   
+		   readerE = new BufferedReader(new FileReader(fileE));//reader打开文件内容
+		   readerA = new BufferedReader(new FileReader(fileA));
+		   
+		   String LineE = "";
+		   String LineA = "";
+		   
+		   LineE = readerE.readLine();//do first
+		   LineA = readerA.readLine();
+		   
+		   while(LineE != null){
+			   System.out.print(LineE + " = ");
+			   
+			   String temp = (Anum++) + ". " + input.nextLine();
+			   if(LineA.equals(temp)) {//读入答案，并判断对错
+				   System.out.println("True");
+				   Tnum++;
+			   }
+			   else {
+				   System.out.println("False");
+				   Fnum++;
+			   }
+			   
+			   LineE = readerE.readLine();//do again
+			   LineA = readerA.readLine();
+		   }
+		   
+		   readerE.close();
+		   readerA.close();
+		   
+		   System.out.println("\nTrue: " + Tnum + "  False: " + Fnum);
+		   
+	   } catch(IOException e) { e.printStackTrace(); } 
+		
+    }
+    
 	public static void main(String[] args) {
         MainClass mainclass = new MainClass();
-        int Rance = 10;
+        int Rance = 20;
         int Number = 10;
-        mainclass.Run(Rance, Number);
+        
+        mainclass.Build(Rance, Number);
+        //mainclass.Judge();
+        
+        System.out.println("\n/---end---/");
     }
 }
