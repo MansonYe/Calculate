@@ -4,43 +4,74 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 
 public class MainClass {
-	
-    private void Build(int Rance, int Number) {
+
+    private void Build(int Range, int Number) {
     	CreateClass Create = new CreateClass();
     	CountClass Count = new CountClass();
+    	
+    	FileOutputStream outputStream1 = null;
+    	PrintWriter printWriter1 = null;
+    	FileOutputStream outputStream2 = null;
+    	PrintWriter printWriter2 = null;
+    	int i = 1;
     	
     	String[] CaluBack;//暂存后缀式
     	String Calu;//保存中缀式
     	String Result;//保存结果
     	
-    	do {
-    		CaluBack = Create.CaluCreate(Rance);//创建后缀式，并保存（字符数组）
-        	Create.EquationConstruct();//转换为中缀式
-    		
-        	if(Count.CaluCount(CaluBack)) //根据后缀式计算结果，返回值表示计算结果是否符合要求
-        	{	
-        		Result = Count.getResult();//保存结果（字符串）
-        		Calu = Create.getCalu();//保存中缀式（字符串）
+    	try {
+        	outputStream1 = new FileOutputStream("Exercises.txt");
+        	printWriter1 = new PrintWriter(outputStream1);
+        	outputStream2 = new FileOutputStream("Answers.txt");
+        	printWriter2 = new PrintWriter(outputStream2);
+        	 
+        	do {
+        		CaluBack = Create.CaluCreate(Range);//创建后缀式，并保存（字符数组）
+            	Create.EquationConstruct();//转换为中缀式
         		
-        		/**************/
-        		
-	        	Create.CreateTest();    Count.CountTest();    System.out.println("");
-        		//testing
-        	}
-        	else {//不符合要求，则Number自加，以便重做
-        		Number++;
-        	}
+            	if(Count.CaluCount(CaluBack)) //根据后缀式计算结果，返回值表示计算结果是否符合要求
+            	{	
+            		Result = Count.getResult();//保存结果（字符串）
+            		Calu = Create.getCalu();//保存中缀式（字符串）
+            		
+            		/**************/
+            		printWriter1.println(i + ". " + Calu);
+            		
+            		printWriter2.println(i + ". " + Result);
+            		
+            		i++;
+            		
+    	        	//Create.CreateTest();    Count.CountTest();    System.out.println("");
+            		//testing
+            	}
+            	else {//不符合要求，则Number自加，以便重做
+            		Number++;
+            	}
+            	
+        	}while(--Number != 0);
         	
-    	}while(--Number != 0);
+    	
+    	} catch (IOException e) {
+			System.out.println("Sorry, there has been a problem opening or writing to the file!");
+		} finally {
+			if(printWriter1 != null) {
+				 printWriter1.close();
+			}
+			if(printWriter2 != null) {
+				 printWriter2.close();
+			}
+		}
     	
     }
 	
     private void Judge() {
-    	File fileE = new File("ExercisesTest.txt");
-		File fileA = new File("AnswerTest.txt");
+    	File fileE = new File("Exercises.txt");
+		File fileA = new File("Answers.txt");
 		BufferedReader readerE = null;
 		BufferedReader readerA = null;
 		Scanner input = new Scanner(System.in);
@@ -82,18 +113,70 @@ public class MainClass {
 		   
 		   System.out.println("\nTrue: " + Tnum + "  False: " + Fnum);
 		   
-	   } catch(IOException e) { e.printStackTrace(); } 
+		} catch(IOException e) { e.printStackTrace(); } 
 		
+		input.close();
+    }
+    
+    private void Compare() {//比较answer文档和正确答案
+    	String expression = "(1 / 3) + (2 - 1)";//读入的算式
+		
+    	String[] CaluBack = new String[20];//后缀式
+		
+    	//中缀式转后缀式
+		Transform caltest = new Transform();
+		caltest.prepare(expression);
+		CaluBack = caltest.getPostfixStack();
+		
+		int i = 0;//测试，后缀式输出
+		while(i < 20 && CaluBack[i] != null)
+			System.out.print(CaluBack[i++]);
+		
+		
+		//后缀式计算结果
+		//结果与Answer对比
+		//统计对错个数
     }
     
 	public static void main(String[] args) {
+		
+	
         MainClass mainclass = new MainClass();
-        int Rance = 20;
-        int Number = 10;
         
-        mainclass.Build(Rance, Number);
-        //mainclass.Judge();
+        mainclass.Compare();
+        /*
+        int Range = 0;
+        int Number = 1;
+        int i = 0;
+        Scanner input = new Scanner(System.in);
         
+        do {
+        	switch(args[i]) {
+        	case "-r":
+        		Range = Integer.parseInt(args[i+1]);
+        		break;
+        	case "-n":
+        		Number = Integer.parseInt(args[i+1]);
+        		break;
+        	default:
+        		break;
+        	}
+        	i++;
+        }while(i < args.length);
+        
+        if(Range == 0) {
+        	System.out.println("Range have not input, please input again:");
+        	Range = input.nextInt();
+        }
+        
+        System.out.println("Start with: Range = " + Range + ", Number = " + Number);
+        
+        mainclass.Build(Range, Number);
+        mainclass.Judge();
+
+        input.close();
+        */
         System.out.println("\n/---end---/");
+        
     }
 }

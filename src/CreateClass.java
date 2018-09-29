@@ -18,7 +18,7 @@ public class CreateClass {
 		do {
 			if( ((int)(Math.random()*2) != 1) && (n-1 > c) ) {
 			//随机但后缀式中算符数量不可大于数字数量（从左到右）
-				CaluBack[i++] = SingCollection[(int)(Math.random()*5)];
+				CaluBack[i++] = SingCollection[(int)(Math.random()*(5 - c/2))];
 				c++;
 			}
 			else if(n < 4){
