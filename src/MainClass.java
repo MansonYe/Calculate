@@ -39,15 +39,12 @@ public class MainClass {
             		Result = Count.getResult();//保存结果（字符串）
             		Calu = Create.getCalu();//保存中缀式（字符串）
             		
-            		/**************/
             		printWriter1.println(i + ". " + Calu);
             		
             		printWriter2.println(i + ". " + Result);
             		
             		i++;
             		
-    	        	//Create.CreateTest();    Count.CountTest();    System.out.println("");
-            		//testing
             	}
             	else {//不符合要求，则Number自加，以便重做
             		Number++;
@@ -118,7 +115,7 @@ public class MainClass {
 		input.close();
     }
     
-    private void Compare() {//比较answer文档和正确答案
+    private void Compare(String ExeFileAddress, String AnsFileAddress) {//比较answer文档和正确答案
     	String expression = "(1 / 3) + (2 - 1)";//读入的算式
 		
     	String[] CaluBack = new String[20];//后缀式
@@ -143,7 +140,10 @@ public class MainClass {
 	
         MainClass mainclass = new MainClass();
         
-        mainclass.Compare();
+        String ExeFileAddress = null;
+        String AnsFileAddress = null;
+        
+        mainclass.Compare(ExeFileAddress, AnsFileAddress);
         /*
         int Range = 0;
         int Number = 1;
@@ -158,22 +158,33 @@ public class MainClass {
         	case "-n":
         		Number = Integer.parseInt(args[i+1]);
         		break;
+        	case "-e":
+        		ExeFileAddress = args[i+1];
+        		break;
+        	case "-a":
+        		AnsFileAddress = args[i+1];
+        		break;
         	default:
         		break;
         	}
         	i++;
         }while(i < args.length);
         
-        if(Range == 0) {
-        	System.out.println("Range have not input, please input again:");
-        	Range = input.nextInt();
+        if(ExeFileAddress != null && AnsFileAddress != null) {
+        	mainclass.Compare(ExeFileAddress, AnsFileAddress);
         }
-        
-        System.out.println("Start with: Range = " + Range + ", Number = " + Number);
-        
-        mainclass.Build(Range, Number);
-        mainclass.Judge();
+        else {
+        	if(Range == 0) {
+            	System.out.println("Range have not input, please input again:");
+            	Range = input.nextInt();
+            }
+            
+            System.out.println("Start with: Range = " + Range + ", Number = " + Number);
+            
+            mainclass.Build(Range, Number);
+            mainclass.Judge();
 
+        }
         input.close();
         */
         System.out.println("\n/---end---/");
