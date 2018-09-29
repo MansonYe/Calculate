@@ -11,21 +11,36 @@ public class Transform {
         return c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')';
     }
     
+    private boolean isOperaS(String c) {
+        return c == "+" || c == "-" || c == "*" || c == "/" || c == "(" || c == ")";
+    }
+    
+    private boolean isDigit(String strNum){
+        return strNum.matches("[0-9]{1,}");
+    }
+    
     public boolean compare(char cur, char peek) {// 如果是peek优先级高于cur，返回true，默认都是peek优先级要低
         return priority[(peek) - 40] >= priority[(cur) - 40];
     }
     
     public String[] getPostfixStack() {
-    	String[] CaluBackt = new String[20];
+    	String[] CaluBacktest = new String[7];
     	String Temp;
     	int i = 0;
     	
     	Collections.reverse(CaluBack);
     	
-    	while(i < 20 && !CaluBack.isEmpty()) 
-    		CaluBackt[i++] = CaluBack.pop().trim();
     	
-    	return CaluBackt;
+    	while(!CaluBack.isEmpty()) {
+    		Temp = CaluBack.pop().trim();
+    		if(!Temp.isEmpty()) {
+    			CaluBacktest[i] = Temp;
+
+        		i++;
+    		}
+    	}
+    	
+    	return CaluBacktest;
     }
     
     public void prepare(String expression) {

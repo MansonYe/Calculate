@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -75,7 +76,8 @@ public class MainClass {
 		int Tnum = 0;
 		int Fnum = 0;
 		int Anum = 1;
-		// TestAnswer = {"10", "6'1/4", "5'1/3", "21"};
+		String True = "";
+    	String False = "";
 	   
 		try {
 		   
@@ -107,8 +109,13 @@ public class MainClass {
 		   
 		   readerE.close();
 		   readerA.close();
+		   if(True != "")
+ 			   True = True.substring(0, (True.length()-2) );
+ 		   if(False != "")
+			   False = False.substring(0, (False.length()-2) );
+ 		   System.out.println("\nCorrect:  " + Tnum + " (" + True + ")");
+ 		   System.out.println("Wrong:  " + Fnum + " (" + False + ")");
 		   
-		   System.out.println("\nTrue: " + Tnum + "  False: " + Fnum);
 		   
 		} catch(IOException e) { e.printStackTrace(); } 
 		
@@ -116,23 +123,70 @@ public class MainClass {
     }
     
     private void Compare(String ExeFileAddress, String AnsFileAddress) {//比较answer文档和正确答案
-    	String expression = "(1 / 3) + (2 - 1)";//读入的算式
-		
-    	String[] CaluBack = new String[20];//后缀式
-		
-    	//中缀式转后缀式
+    	File fileE = new File(ExeFileAddress);
+		File fileA = new File(AnsFileAddress);
+		BufferedReader readerE = null;
+		BufferedReader readerA = null;
 		Transform caltest = new Transform();
-		caltest.prepare(expression);
-		CaluBack = caltest.getPostfixStack();
+		CountClass Count = new CountClass();
+		int Anum = 0;
+		int Tnum = 0;
+		int Fnum = 0;
+    	String True = "";
+    	String False = "";
 		
-		int i = 0;//测试，后缀式输出
-		while(i < 20 && CaluBack[i] != null)
-			System.out.print(CaluBack[i++]);
+    	String[] CaluBack = new String[7];//后缀式
+    	String Result;
 		
+    	
+    	try {
+ 		   
+    		readerE = new BufferedReader(new FileReader(fileE));//reader打开文件内容
+    		readerA = new BufferedReader(new FileReader(fileA));
+ 		   
+    		String LineE = "";
+    		String LineA = "";
+ 		   
+    		LineE = readerE.readLine();//do first
+    		LineA = readerA.readLine();
+ 		   
+    		
+    		while(LineE != null){ 
+    			Anum++;
+    			LineE = LineE.substring((Anum+"").length()+2);
+    			caltest.prepare(LineE);//中缀转后缀
+    			CaluBack = caltest.getPostfixStack();
+ 			 
+ 			 
+    			Count.CaluCount(CaluBack);
+    			Result = Count.getResult();
+ 			 
+    			if(LineA.equals(Anum + ". " + Result)) {//读入答案，并判断对错
+ 				   True += Anum + ", ";
+ 				   Tnum++;
+ 			   }
+ 			   else {
+ 				   False += Anum + ", ";
+ 				   Fnum++;
+ 			   }
+ 			 
+ 			 	LineE = readerE.readLine();//do again
+ 			 	LineA = readerA.readLine();
+ 			  
+ 			 
+    		}
+ 		   
+ 		   readerE.close();
+ 		   readerA.close();
+ 		   if(True != "")
+ 			   True = True.substring(0, (True.length()-2) );
+ 		   if(False != "")
+			   False = False.substring(0, (False.length()-2) );
+ 		   System.out.println("\nCorrect:  " + Tnum + " (" + True + ")");
+ 		   System.out.println("Wrong:  " + Fnum + " (" + False + ")");
+ 		   
+ 		} catch(IOException e) { e.printStackTrace(); } 
 		
-		//后缀式计算结果
-		//结果与Answer对比
-		//统计对错个数
     }
     
 	public static void main(String[] args) {
@@ -143,8 +197,6 @@ public class MainClass {
         String ExeFileAddress = null;
         String AnsFileAddress = null;
         
-        mainclass.Compare(ExeFileAddress, AnsFileAddress);
-        /*
         int Range = 0;
         int Number = 1;
         int i = 0;
@@ -186,7 +238,7 @@ public class MainClass {
 
         }
         input.close();
-        */
+        
         System.out.println("\n/---end---/");
         
     }

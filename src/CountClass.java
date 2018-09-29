@@ -19,7 +19,7 @@ public class CountClass {
 			num[loop2++] = new Elem();
 		loop2 = 0;
 		
-		for(loop1 = 0; loop1 < CaluBack.length; loop1++) {
+		for(loop1 = 0; loop1 < CaluBack.length && CaluBack[loop1] != null; loop1++) {
 			if( isDigit(CaluBack[loop1]) ) {
 			//判断是否为数字，目前只做了个位数判断，后期视情况修改
 				num[loop2].setMole( Integer.parseInt(CaluBack[loop1]) * num[loop2].getDeno() );

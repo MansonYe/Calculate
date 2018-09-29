@@ -8,8 +8,13 @@ public class test1 extends MainClass{
 	public void test() {
 		System.out.println("test");
 		MainClass testMain = new MainClass();
-		String[] testString = {"-n", "100", "-r", "10"};
-		testMain.main(testString);
+		String[] test1 = {"-n", "5", "-r", "10"};
+		String[] test2 = {"-a", "answersfile.txt", "-e", "exercisesfile.txt"};
+		
+		testMain.main(test1);
+		
+		testMain.main(test2);
+		
 		//fail("ипн╢й╣ож");
 	}
 
